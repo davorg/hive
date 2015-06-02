@@ -4,21 +4,13 @@ use strict;
 use warnings;
 use 5.010;
 
-use LWP::Simple;
-use HTTP::Cookies;
-use HTTP::Request::Common;
-
-my $base_url = 'https://api.hivehome.com/v5/';
+use Hive;
 
 my ($user, $pass) = @ARGV;
 
-my $ua = LWP::UserAgent->new(
-  cookie_jar => HTTP::Cookies->new,
-);
+my $hive = Hive->new({
+  username => $user,
+  password => $pass,
+});
 
-my $req = POST "$base_url/login",
-               [ username => $user, password => $pass ];
-say $ua->request($req)->as_string;
-
-$req = GET "$base_url/users/$user";
-say $ua->request($req)->as_string;
+say $hive->get_user;
