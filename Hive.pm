@@ -4,7 +4,7 @@ use Moose;
 use strict;
 use warnings;
 
-use LWP::Simple;
+use LWP::UserAgent;
 use HTTP::Cookies;
 use HTTP::Request::Common;
 
