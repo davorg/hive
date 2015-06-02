@@ -1,0 +1,12 @@
+https://api.hivehome.com/v5/login
+https://api.hivehome.com/v5/users/<YOUR HIVE LOGIN>
+https://api.hivehome.com/v5/users/<YOUR HIVE LOGIN>/hubs/<HUB ID>
+https://api.hivehome.com/v5/users/<YOUR HIVE LOGIN>/hubs/<HUB ID>/devices
+https://api.hivehome.com/v5/users/<YOUR HIVE LOGIN>/widgets/temperature
+https://api.hivehome.com/v5/users/<YOUR HIVE LOGIN>/widgets/climate/<HUB MAC ADDRESS>/control
+https://api.hivehome.com/v5/users/<YOUR HIVE LOGIN>/widgets/climate/<HUB MAC ADDRESS>/controls/schedule
+https://api.hivehome.com/v5/users/<YOUR HIVE LOGIN>/widgets/temperature/<HUB MAC ADDRESS>/history?period=today
+https://api.hivehome.com/v5/users/<YOUR HIVE LOGIN>/hubs/<HUB ID>/devices/hotwatercontroller/<HUB MAC ADDRESS>/controls
+https://api.hivehome.com/v5/users/<YOUR HIVE LOGIN>/hubs/<HUB ID>/devices/hotwatercontroller/<HUB MAC ADDRESS>/controls/schedule
+https://api.hivehome.com/v5/users/<YOUR HIVE LOGIN>/widgets/climate/targetTemperature?precision=0.5
+https://api.hivehome.com/v5/users/<YOUR HIVE LOGIN>/widgets/climate/targetTemperature
