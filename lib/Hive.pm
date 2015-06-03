@@ -7,6 +7,7 @@ use warnings;
 use LWP::UserAgent;
 use HTTP::Cookies;
 use HTTP::Request::Common;
+use JSON;
 
 has username => (
   is => 'ro',
@@ -40,6 +41,18 @@ has base_url => (
   default => 'https://api.hivehome.com/v5/',
 );
 
+has json => (
+  is => 'ro',
+  isa => 'JSON',
+  lazy_build => 1,
+);
+
+sub _build_json {
+  my $self = shift;
+  return JSON->new->utf8;
+}
+
+
 sub BUILD {
   my $self = shift;
 
@@ -48,11 +61,26 @@ sub BUILD {
   $self->ua->request($req);
 }
 
-sub get_user {
+sub get_temperature {
   my $self = shift;
 
-  my $req = GET $self->base_url . '/users/'. $self->username;
-  return $self->ua->request($req)->as_string;
+  return $self->get('/widgets/temperature');
 }
+
+sub get_target_temperature {
+  my $self = shift;
+
+  return $self->get('/widgets/climate/targetTemperature');
+}
+
+sub get {
+  my $self = shift;
+
+  my $url = $self->base_url . '/users/' . $self->username . shift;
+
+  my $req = GET $url;
+  return $self->json->decode($self->ua->request($req)->content);
+}
+
 
 1;

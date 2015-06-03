@@ -5,6 +5,7 @@ use warnings;
 use 5.010;
 
 use lib 'lib';
+use Data::Dumper;
 use Hive;
 
 my ($user, $pass) = @ARGV;
@@ -14,4 +15,6 @@ my $hive = Hive->new({
   password => $pass,
 });
 
-say $hive->get_user;
+foreach (qw[get_temperature get_target_temperature]) {
+  say Dumper $hive->$_;
+}
