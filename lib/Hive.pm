@@ -56,21 +56,22 @@ sub _build_json {
 sub BUILD {
   my $self = shift;
 
-  my $req = POST $self->base_url . '/login',
-               [ username => $self->username, password => $self->password ];
-  $self->ua->request($req);
+  $self->post('/login', {
+    username => $self->username,
+    password => $self->password,
+  })
 }
 
 sub get_temperature {
   my $self = shift;
 
-  return $self->get('/widgets/temperature');
+  return $self->get_and_decode('/widgets/temperature');
 }
 
 sub get_target_temperature {
   my $self = shift;
 
-  return $self->get('/widgets/climate/targetTemperature');
+  return $self->get_and_decode('/widgets/climate/targetTemperature');
 }
 
 sub get {
@@ -79,8 +80,22 @@ sub get {
   my $url = $self->base_url . '/users/' . $self->username . shift;
 
   my $req = GET $url;
-  return $self->json->decode($self->ua->request($req)->content);
+  $self->ua->request($req);
 }
 
+sub get_and_decode {
+  my $self = shift;
+
+  return $self->json->decode($self->get(@_)->content);
+}
+
+sub post {
+  my $self = shift;
+
+  my $url = $self->base_url . shift;
+  my $args = @_ ? shift : {};
+  my $req = POST $url, [ %$args ];
+  return $self->ua->request($req);
+}
 
 1;
