@@ -8,6 +8,8 @@ use lib 'lib';
 use Data::Dumper;
 use Hive;
 
+die "Please give your Hive username and password\n" if @ARGV < 2;
+
 my ($user, $pass) = @ARGV;
 
 my $hive = Hive->new({
