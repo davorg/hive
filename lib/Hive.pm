@@ -75,6 +75,18 @@ sub _build_json {
   return JSON->new->utf8;
 }
 
+has hubs => (
+  is => 'ro',
+  isa => 'ArrayRef[HashRef]',
+  traits => ['Array'],
+  handles => {
+    all_hubs => 'elements',
+  },
+);
+
+has devices => (
+  is => 'ro',
+);
 
 sub BUILD {
   my $self = shift;
@@ -82,7 +94,15 @@ sub BUILD {
   $self->post('/login', {
     username => $self->username,
     password => $self->password,
-  })
+  });
+
+  $self->{hubs} = $self->get_and_decode('/hubs');
+
+  foreach ($self->all_hubs) {
+    $_->{data} = $self->get_and_decode("/hubs/$_->{id}");
+  }
+
+  $self->{devices} = $self->get_and_decode('/widgets/climate');
 }
 
 sub get_temperature {
