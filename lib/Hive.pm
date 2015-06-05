@@ -1,13 +1,22 @@
 package Hive;
 
 use Moose;
+use Moose::Util::TypeConstraints;
 use strict;
 use warnings;
 
 use LWP::UserAgent;
 use HTTP::Cookies;
 use HTTP::Request::Common;
+use URI;
 use JSON;
+
+subtype 'HiveURI'
+  => as 'URI';
+
+coerce 'HiveURI'
+  => from 'Str'
+  => via { URI->new($_) };
 
 has username => (
   is => 'ro',
@@ -37,19 +46,21 @@ sub _build_ua {
 
 has base_url => (
   is => 'ro',
-  isa => 'Str',
+  isa => 'HiveURI',
   default => 'https://api.hivehome.com/v5/',
+  coerce => 1,
 );
 
 has user_url => (
   is => 'ro',
-  isa => 'Str',
+  isa => 'HiveURI',
   lazy_build => 1,
+  coerce => 1,
 );
 
 sub _build_user_url {
   my $self = shift;
-  return $self->base_url . '/users/' . $self->username;
+  return $self->base_url->as_string . '/users/' . $self->username;
 }
 
 
