@@ -41,6 +41,18 @@ has base_url => (
   default => 'https://api.hivehome.com/v5/',
 );
 
+has user_url => (
+  is => 'ro',
+  isa => 'Str',
+  lazy_build => 1,
+);
+
+sub _build_user_url {
+  my $self = shift;
+  return $self->base_url . '/users/' . $self->username;
+}
+
+
 has json => (
   is => 'ro',
   isa => 'JSON',
@@ -77,7 +89,7 @@ sub get_target_temperature {
 sub get {
   my $self = shift;
 
-  my $url = $self->base_url . '/users/' . $self->username . shift;
+  my $url = $self->user_url . shift;
 
   my $req = GET $url;
   $self->ua->request($req);
