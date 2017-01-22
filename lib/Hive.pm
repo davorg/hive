@@ -41,13 +41,14 @@ sub _build_ua {
 
   LWP::UserAgent->new(
     cookie_jar => HTTP::Cookies->new,
+    agent      => 'bg-hive-api/1.0.5',
   );
 }
 
 has base_url => (
   is => 'ro',
   isa => 'HiveURI',
-  default => 'https://api.hivehome.com/v5/',
+  default => 'https://api-prod.bgchprod.info/api',
   coerce => 1,
 );
 
@@ -105,16 +106,33 @@ sub BUILD {
   $self->{devices} = $self->get_and_decode('/widgets/climate');
 }
 
+sub dump_temperature {
+  my $self = shift;
+
+  my $resp = $self->get('/widgets/temperature');
+  return $resp->content;
+}
+
 sub get_temperature {
   my $self = shift;
 
-  return $self->get_and_decode('/widgets/temperature');
+  my $dat = $self->get_and_decode('/widgets/temperature');
+  return "Inside: $dat->{inside}{now}$dat->{temperatureUnit}\n" .
+         "Outside: $dat->{outside}{now}$dat->{temperatureUnit}";
+}
+
+sub dump_target_temperature {
+  my $self = shift;
+
+  my $resp = $self->get('/widgets/climate/targetTemperature');
+  return $resp->content;
 }
 
 sub get_target_temperature {
   my $self = shift;
 
-  return $self->get_and_decode('/widgets/climate/targetTemperature');
+  my $dat = $self->get_and_decode('/widgets/climate/targetTemperature');
+  return $dat->{temperature} . $dat->{formatting}{temperatureUnit};
 }
 
 sub get {
@@ -123,7 +141,9 @@ sub get {
   my $url = $self->user_url . shift;
 
   my $req = GET $url;
-  $self->ua->request($req);
+  my $resp = $self->ua->request($req);
+  return $resp if $resp->is_success;
+  die $resp->status_line;
 }
 
 sub get_and_decode {

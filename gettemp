@@ -17,6 +17,11 @@ my $hive = Hive->new({
   password => $pass,
 });
 
-foreach (qw[get_temperature get_target_temperature hubs devices]) {
+say $hive->get_temperature;
+say $hive->get_target_temperature;
+say $hive->dump_temperature;
+say $hive->dump_target_temperature;
+
+foreach (qw[hubs devices]) {
   say Dumper $hive->$_;
 }
