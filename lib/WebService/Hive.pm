@@ -1,4 +1,4 @@
-package Hive;
+package WebService::Hive;
 
 use Moose;
 use Moose::Util::TypeConstraints;

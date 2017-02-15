@@ -6,13 +6,13 @@ use 5.010;
 
 use lib 'lib';
 use Data::Dumper;
-use Hive;
+use WebService::Hive;
 
 die "Please give your Hive username and password\n" if @ARGV < 2;
 
 my ($user, $pass) = @ARGV;
 
-my $hive = Hive->new({
+my $hive = WebService::Hive->new({
   username => $user,
   password => $pass,
 });
